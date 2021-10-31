@@ -1,0 +1,1 @@
+brcc32.exe MonoFonts.rc

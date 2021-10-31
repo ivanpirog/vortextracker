@@ -1,0 +1,9 @@
+[Sample]
+T.E +FFF_ +00_ B_ L
+T.E +FFF_ +00_ C_
+T.E +FFF_ +00_ D_
+T.E +FFF_ +00_ D_
+T.E -FFF_ +00_ D_
+T.E -FFF_ +00_ D_
+T.E -FFF_ +00_ C_
+T.E -FFF_ +00_ B_

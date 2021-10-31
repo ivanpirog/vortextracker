@@ -1,0 +1,141 @@
+Vortex Tracker II v1.0 PT3 player for ZX Spectrum Release 7
+(c)2004,2007 S.V.Bulba <vorobey@mail.khstu.ru>
+http://bulba.untergrund.net/ (http://bulba.at.kz/)
+Release date: 30 of April 2007
+Version for MSX: 9 of January 2005 (Release 6)
+Adaptation for XAS 9.06: 11 of January 2005 (Release 6)
+
+Common remarks
+--------------
+
+This PT3-player subject is a playing PT3-modules of all ZX Spectrum Pro Tracker
+version 3 by one player only. You no need now to play PT3.3 modules in one
+player, PT3.6 modules in another one and so on. Any module of any known version
+will be played correctly in this new universal PT3-player.
+
+Project was compiled in assembler for Win32:
+
+SjASM Z80 Assembler v0.39f
+Copyright 2005 Sjoerd Mastijn
+
+Files
+-----
+
+VTII10bG.asm - source Z80 assembler code.
+ZX_Asms\VTII10bG.h - same text is prepared for Alasm.
+ZX_Asms\VTII10bG.txt - same text is prepared for ZX Asm 3.10.
+ZX_Asms\Jocker\PT3_VORT.!a - XAS 9.06 adaptation in Hobeta format by
+Jocker/OHG/CMS (old Release 6).
+VTII10bG - assembled binary code block to load at #C000 address.
+Files in MSX folder - player (old Release 6) adaptation for MSX computers by
+Alfonso D.C. a.k.a. Dioniso).
+Files in ROM folder - player adaptation to run in ROM (all self-modified code
+moved to variables area).
+
+Entry points
+------------
+
+Before playing call START (loading) address. Player are not reallocable, so you
+need to assemble with other ORG value, if you want to load code at other than
+#C000 address, also you can place VARS area to any other address too. After
+calling START AY is stop any sounding. At START+10 is located SETUP byte, where
+bit 0 is used to control looping of melody. At any time you can set bit 0 to
+disable loop. Bit 7 can be checked at any moment, it is set after reaching end
+of module (finishing playing of last position).
+
+In current compilation module must be loaded after variables (by default). Of
+course, you can change it in source or in assembled code. Also you can specify
+module address in HL as follows:
+
+	LD HL,PT3ModuleAddress
+	CALL START+3
+
+The easiest way to compile player with module is using built-in Vortex Tracker
+II exporter to ZX Spectrum, where you can specify both START address and setup
+byte.
+
+By calling START you are proceeding INIT procedure, which analyzes PT3 module
+header and prepares corresponding note and volume tables (it is need for correct
+playing of modules of different PT3 subversions). Also you can call START after
+stopping playing to mute AY sound. In last case you can call START+8 to simple
+mute AY sound, to continue playing simply continue calling START+5 as usually.
+
+To play, call START+5 address each 1/50 of second (interrupt). Playing selects
+right portamento algorithm for old (v3.5-) and new (v3.6+ or VT II) modules.
+During running PLAY subprogram no any interrupts are expected, it is your task
+to right call PLAY. For example, next example is totally right:
+
+	CALL #C000 ;calling init
+	EI ;enable interrupts
+_LP	HALT ;wait for next interrupt
+	CALL #C005 ;call play, player uses 9500 tacts max,
+;so no interrupt can be before next HALT
+	XOR A ;test keyboard
+	IN A,(#FE)
+	CPL
+	AND 15
+	JR Z,_LP
+;1 first way to mute sound (you can resume playing from current place):
+	CALL #C008 ;mute AY sound
+
+;2 second way to mute sound (resuming playing is able only from begin):
+;2	CALL #C000 ;reset AY to stop sound
+
+	RET
+
+At START+11 address word pointer is placed. This is pointer to module to current
+position. To calculate position number use code like this:
+
+	LD HL,(START+11)
+	LD DE,-PT3ModuleAddress-201
+	ADD HL,DE
+
+In HL register will be position number (H will be 0 if module is not modified).
+
+Example of playing without loop:
+
+	LD A,1
+	LD (START+10),A
+	CALL START
+	EI
+LOOP	HALT
+	CALL START+5
+	LD A,(START+10)
+	RLA
+	JR NC,LOOP
+	RET
+
+Loop three times:
+
+	CALL START
+	LD A,3
+	EI
+LOOP	PUSH AF
+	HALT
+	CALL START+5
+	POP AF
+	LD HL,START+10
+	SLA (HL)
+	JR NC,LOOP
+	DEC A
+	JR NZ,LOOP
+	CALL START+8
+	RET
+
+Read also all comments in source file.
+
+Thanks
+------
+
+Very big thanks to all who helped, and especially to:
+
+Spectre for help in debugging and adaptation for ZX assemblers.
+Ivan Roshin for optimization, tables generators, articles.
+Alfonso D.C. aka Dioniso for adaptation to MSX computers.
+Alone Coder for help in optimization.
+Jocker/OHG/Critical Mass for adaptation for XAS 9.06.
+Himik's ZxZ for moral support.
+
+Sergey Bulba
+
+19 of September 2004 - 30 of April 2007

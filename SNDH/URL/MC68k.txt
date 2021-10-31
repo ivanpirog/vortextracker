@@ -1,0 +1,5 @@
+MC68000 assembler for MS-DOS
+ftp://nyquist.ee.ualberta.ca/pub/motorola/m68k/x68k.zip
+MC68000 Free Pascal compiler for MS-DOS
+http://public.planetmirror.com/pub/fpc/dist/amiga-0.99.5/pp68k.zip
+
