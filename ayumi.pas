@@ -1,3 +1,10 @@
+{
+High quality AY/YM sound chip emulator by Peter Sovietov aka true-grue.
+https://github.com/true-grue/ayumi
+(c) Peter Sovietov
+
+Rewriten to Delphi by Ivan Pirog aka Flexx.
+}
 unit ayumi;
 
 interface
