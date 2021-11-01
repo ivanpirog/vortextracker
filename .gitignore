@@ -13,3 +13,4 @@ FastMM*
 !Midi*.dcu
 !CircBuf.dcu
 gpprof*
+*.~*

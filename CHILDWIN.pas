@@ -4254,6 +4254,7 @@ var
 begin
   if RedrawDisabled then Exit;
   if not TMDIChild(ParentWin).Visible then Exit;
+  if not TMDIChild(ParentWin).InitFinished then Exit;
   if TMDIChild(ParentWin).VTMP = nil then Exit;
   if ShownPattern = nil then Exit;
   if TMDIChild(ParentWin).Closed then Exit;
@@ -12622,6 +12623,7 @@ begin
       if LowerCase(ExtractFileExt(Name)) = '.pt3' then
         SavedAsText := False;
     end;
+    Module_SetPointer(VTMP, 1);
     SetFileName(Name);
     VtmFeaturesGrp.ItemIndex := VTMP.FeaturesLevel;
     SaveHead.ItemIndex := Ord(not VTMP.VortexModule_Header);
@@ -12682,14 +12684,11 @@ begin
       if VTMP.Ornaments[i] <> nil then
         for Tm := VTMP.Ornaments[i].Length to MaxOrnLen - 1 do
           VTMP.Ornaments[i].Items[Tm] := 0;
-
-    Tracks.RedrawTracks(0);
   finally
     UndoWorking := False;
     SongChanged := False;
     BackupSongChanged := False;
-    if VTMP <> nil then
-      Module_SetPointer(VTMP, 1);
+    Tracks.RedrawTracks(0);
   end;
 end;
 

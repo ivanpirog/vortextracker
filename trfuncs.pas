@@ -366,6 +366,8 @@ var
     IntCnt: integer;
   end;
 
+procedure checkVTMPointer;
+
 procedure Module_SetPointer(ModulePointer: PModule; Chip: integer);
 {устанавливает указатель на структуру модул€}
 {¬ызываетс€ хот€ бы раз перед использованием других процедур}
@@ -600,6 +602,27 @@ uses AY, WaveOutAPI, FXMImport, Main, RegExpr, Classes, StrUtils;
 var
   VTM: PModule;
 
+
+procedure checkVTMPointer;
+  function DoNothing(a: Integer): Boolean;
+  begin
+    result := True;
+  end;
+  
+var a: Integer;
+begin
+  if VTM = nil then Exit;
+  try
+    // Try to get access
+    a := VTM.Ton_Table;
+    DoNothing(a);
+  except
+    // VTM pointer is pointing to freed memory!
+    // Let's clear pointer.
+    VTM := nil;
+  end;
+end;
+
 procedure Module_SetPointer(ModulePointer: PModule; Chip: integer);
 begin
   VTM := ModulePointer;
@@ -747,7 +770,7 @@ end;
 function GetNoteByEnvelope(e: integer): integer;
 var ToneTable: Integer;
 begin
-
+  checkVTMPointer;
   if VTM = nil then ToneTable := -1
   else
     ToneTable := VTM.Ton_Table;
@@ -9102,16 +9125,27 @@ begin
   if VTMP = nil then exit;
 
   for i := Low(VTMP.Samples) to High(VTMP.Samples) do
-    if VTMP.Samples[i] <> nil then Dispose(VTMP.Samples[i]);
+    if VTMP.Samples[i] <> nil then begin
+      Dispose(VTMP.Samples[i]);
+      VTMP.Samples[i] := nil;
+    end;
 
   for i := Low(VTMP.Ornaments) to High(VTMP.Ornaments) do
-    if VTMP.Ornaments[i] <> nil then Dispose(VTMP.Ornaments[i]);
+    if VTMP.Ornaments[i] <> nil then begin
+      Dispose(VTMP.Ornaments[i]);
+      VTMP.Ornaments[i] := nil
+    end;
     
   for i := -1 to MaxPatNum do
-    if VTMP.Patterns[i] <> nil then Dispose(VTMP.Patterns[i]);
+    if VTMP.Patterns[i] <> nil then begin
+      Dispose(VTMP.Patterns[i]);
+      VTMP.Patterns[i] := nil;
+    end;
+
 
   Dispose(VTMP);
   VTMP := nil;
+  VTM  := nil;
 end;
 
 procedure NewVTMP(var VTMP: PModule);
