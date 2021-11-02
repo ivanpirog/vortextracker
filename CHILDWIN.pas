@@ -11835,6 +11835,11 @@ begin
   y1 := Y div Samples.CelH;
   LineNum := Samples.ShownFrom + y1;
 
+  // Check limits, because mouse pointer can be out of the TSamples box
+  if LineNum > MaxSamLen - 1 then LineNum := MaxSamLen - 1;
+  if LineNum < 0             then LineNum := 0;
+
+  // Calculate cursor position on samples sheet
   if (y1 >= 0) and (y1 < Samples.NOfLines) and (x1 >= 0) and not (x1 in [3, 9, 18, 21..36]) then
   begin
     if x1 in [6..7] then
@@ -11972,11 +11977,18 @@ var
   ButtonPressed: Boolean;
 begin
   ValidateSample2(SamNum);
+
+  // Calculate cursor position on the TSamples sheet, and current line
   x1 := X div Samples.CelW - 3;
   y1 := Y div Samples.CelH;
   LineNum := y1 + Samples.ShownFrom;
   ButtonPressed := (ssLeft in Shift) or (ssRight in Shift);
 
+  // Check limits, because mouse pointer can be out of the TSamples box
+  if LineNum > MaxSamLen - 1 then LineNum := MaxSamLen - 1;
+  if LineNum < 0             then LineNum := 0;
+
+  // Do hit for cursor position
   if Shift = [] then
     Samples.DoHint(x1, y1)
   else
@@ -11986,7 +11998,7 @@ begin
     ShowHintTimer.Interval := 9000;
   end;
 
-  // Accept means mouse Y coordinate more than Y +- MouseShift value
+  // Accept means, mouse Y coordinate more than Y +- MouseShift value
   Accept := (Y <= SamplesLastMouseCursorY - MouseShift) or (Y >= SamplesLastMouseCursorY + MouseShift);
 
 
@@ -20358,7 +20370,7 @@ end;
 
 procedure TMDIChild.UnloopBtnClick(Sender: TObject);
 var
-  Line, UnloopCount, LastLine, LoopLength, i: Integer;
+  NextLine, LastLine, UnloopCount, LoopLength, i: Integer;
   TilTheEnd, Done: Boolean;
 
   LineTone, FreqAccum, LineNoise, NoiseAccum, LineAmplitude, AmplitudeAccum: SmallInt;
@@ -20370,10 +20382,17 @@ begin
 
   Samples.isSelecting := False;
   Sample     := Samples.ShownSample;
-  Line       := Sample.Length;
+  NextLine   := Sample.Length;
   LastLine   := MaxSamLen - 1;
   LoopLength := Sample.Length - Sample.Loop;
   Done       := False;
+
+  // If next line goes beyond the sample, then there is nowhere to unloop
+  if NextLine > LastLine then begin
+    MessageDlg('Unloop is not possible because the sample has a maximum length.' 
+      + #13#10 + 'There is nowhere to unloop.',  mtWarning, [mbOK], 0);
+    Exit;
+  end;
 
   SaveSampleUndo(Sample);
   SongChanged := True;
@@ -20389,9 +20408,9 @@ begin
   
     for i := Sample.Loop to Sample.Length - 1 do
     begin
-      Sample.Items[Line] := Sample.Items[i];
+      Sample.Items[NextLine] := Sample.Items[i];
 
-      if Line = LastLine then
+      if NextLine = LastLine then
       begin
         Sample.Length := LastLine + 1;
         Sample.Loop := LastLine;
@@ -20399,7 +20418,7 @@ begin
         Break;
       end
       else
-        Inc(Line);
+        Inc(NextLine);
     end;
 
     if not TilTheEnd and (UnloopCount = 1) then
@@ -20409,10 +20428,10 @@ begin
 
   until Done;
 
-  if not TilTheEnd and (Line <> LastLine) then
+  if not TilTheEnd and (NextLine <> LastLine) then
   begin
-    Sample.Length := Line;
-    Sample.Loop := Line - LoopLength;
+    Sample.Length := NextLine;
+    Sample.Loop := NextLine - LoopLength;
   end;
 
   SampleLenUpDown.Position := Sample.Length;
