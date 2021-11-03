@@ -324,6 +324,7 @@ type
     ToggleSamplesAct: TAction;
     TracksManagerAct: TAction;
     GlobalTranspositionAct: TAction;
+    function IsFileWritable(FilePath: String): Boolean;
     function VScrollVisible(NewHeight: Integer): Boolean;
     function HScrollVisible(NewLeft: Integer): Boolean;
     function VScrollSize(NewHeight: Integer): Integer;
@@ -831,6 +832,29 @@ var
 begin
   ShGetSpecialFolderPath(0, FilePath, CSIDL_PERSONAL, False);
   Result := FilePath;
+end;
+
+
+function TMainForm.IsFileWritable(FilePath: String): Boolean;
+var attrs: Integer;
+begin
+  {$WARN SYMBOL_PLATFORM OFF}
+  Result := True;
+  attrs  := FileGetAttr(FilePath);
+
+  if attrs and faReadOnly > 0 then begin
+    // Try to unset read only attribute
+    FileSetAttr(FilePath, attrs and not faReadOnly);
+
+    // And check for read only again
+    if FileGetAttr(FilePath) and faReadOnly > 0 then begin
+      Application.MessageBox(PChar('File "'+ ExtractFilename(FilePath) +'" is read only.'), 'Vortex Tracker',
+        MB_OK + MB_ICONSTOP + MB_TOPMOST);
+        Result := False;
+    end;
+
+  end;
+  {$WARN SYMBOL_PLATFORM ON}
 end;
 
 
@@ -2806,6 +2830,7 @@ var
   f: file;
 
 begin
+  if not IsFileWritable(FileName) then Exit;
   if not AsText then
   begin
     if not VTM2PT3(@PT3, CW.VTMP, Size) then
@@ -2861,6 +2886,7 @@ var
   Size: integer;
   f: file;
 begin
+  if not IsFileWritable(FileName) then Exit;
   if not AsText then
   begin
     if not VTM2PT3(@PT3, CW.VTMP, Size) then
