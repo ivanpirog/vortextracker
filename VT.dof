@@ -105,13 +105,17 @@ HostApplication=
 Launcher=
 UseLauncher=0
 DebugCWD=
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
 [Version Info]
 IncludeVerInfo=1
 AutoIncBuild=1
 MajorVer=2
 MinorVer=6
 Release=4
-Build=1238
+Build=1239
 Debug=0
 PreRelease=0
 Special=0
@@ -122,7 +126,7 @@ CodePage=1251
 [Version Info Keys]
 CompanyName=
 FileDescription=Vortex Tracker chip music editor
-FileVersion=2.6.4.1238
+FileVersion=2.6.4.1239
 InternalName=
 LegalCopyright=
 LegalTrademarks=

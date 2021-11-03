@@ -50,7 +50,7 @@ const
   DemosongsDefaultDir = '\Demosongs';
   FontsDir = '\Fonts';
 
-  InternalFonts: array[0..24] of array[0..1] of string = (
+  InternalFonts: array[0..26] of array[0..1] of string = (
     ('SegoeVT',         'Segoe VT'),
     ('ArrowsFont',      'Arrows'),
     ('ConsolasFont',    'Consolas'),
@@ -70,6 +70,8 @@ const
     ('ShareTechFont',   'Share Tech Mono'),
     ('ZXSpectrumFont',  'ZX Spectrum'),
     ('Kongtext',        'Kongtext'),
+    ('Gohufont',        'gohufont-14'),
+    ('GohufontBold',    'gohufont-14b'),
     ('ProFontWindows',  'ProFontWindows'),
     ('JackInput',       'JackInput'),
     ('CourierNew',      'Courier New'),

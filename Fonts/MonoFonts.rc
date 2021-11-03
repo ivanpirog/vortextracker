@@ -24,3 +24,5 @@ CQMono RCDATA CQMono.ttf
 ConsolaMono RCDATA ConsolaMono.ttf
 ConsolaMonoBold RCDATA ConsolaMonoBold.ttf
 wstgerm RCDATA wstgerm.fon
+Gohufont RCDATA gohufont14.fon
+GohufontBold RCDATA gohufont14b.fon
