@@ -7918,7 +7918,10 @@ type
 begin
 
   // Ctrl+Enter -> Open selected sample or ornament
-  if (Shift = [ssCtrl]) and (Key = VK_RETURN) and (Tracks.CursorX in [12, 14, 26, 28, 40, 42]) then
+  if (Shift = [ssCtrl]) and (Key = VK_RETURN)
+     and (Tracks.CursorX in [12, 14, 26, 28, 40, 42])
+     and not DisableCtrlClick
+  then
   begin
     OpenSampleOrnament;
     Exit;

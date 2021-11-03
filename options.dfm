@@ -98,9 +98,9 @@ object Form1: TForm1
         object DisableCtrlClickOpt: TCheckBox
           Left = 12
           Top = 154
-          Width = 279
+          Width = 285
           Height = 17
-          Caption = 'Disable Ctrl+Click on sample/ornament'
+          Caption = 'Disable Ctrl+Click and Ctrl+Enter on sample/ornament'
           TabOrder = 5
           OnClick = DisableCtrlClickOptClick
         end
