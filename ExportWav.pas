@@ -2,7 +2,8 @@
 This is part of Vortex Tracker II project
 
 Version 2.0 and later
-(c)2017-2018 Ivan Pirog, ivan.pirog@gmail.com
+(c)2017-2021 Ivan Pirog, ivan.pirog@gmail.com
+https://github.com/ivanpirog/vortextracker
 }
 unit ExportWav;
 

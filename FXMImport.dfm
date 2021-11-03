@@ -70,7 +70,7 @@ object FXMParams: TFXMParams
     Top = 64
     Width = 105
     Height = 21
-    TabOrder = 1
+    TabOrder = 2
     OnChange = Edit2Change
   end
   object Edit3: TEdit
@@ -78,7 +78,7 @@ object FXMParams: TFXMParams
     Top = 104
     Width = 105
     Height = 21
-    TabOrder = 2
+    TabOrder = 4
     OnChange = Edit3Change
   end
   object Edit4: TEdit
@@ -86,7 +86,7 @@ object FXMParams: TFXMParams
     Top = 24
     Width = 105
     Height = 21
-    TabOrder = 3
+    TabOrder = 1
     OnChange = Edit4Change
   end
   object Button1: TButton
@@ -114,7 +114,7 @@ object FXMParams: TFXMParams
     Top = 64
     Width = 105
     Height = 21
-    TabOrder = 4
+    TabOrder = 3
     OnChange = Edit5Change
   end
   object Edit6: TEdit

@@ -5,8 +5,9 @@ This is part of Vortex Tracker II project
 Author: Sergey Bulba, vorobey@mail.khstu.ru
 Support page: http://bulba.untergrund.net/
 
-(c)2017-2019 Version 2.0 and later
+(c)2017-2021 Version 2.0 and later
 Ivan Pirog (Flexx/Enhancers), ivan.pirog@gmail.com
+https://github.com/ivanpirog/vortextracker
 }
 
 {.$DEFINE DEBUG}

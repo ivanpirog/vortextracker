@@ -6,7 +6,8 @@ Author: Sergey Bulba, vorobey@mail.khstu.ru
 Support page: http://bulba.untergrund.net/
 
 Version 2.0 and later
-(c)2017-2019 Ivan Pirog, ivan.pirog@gmail.com
+(c)2017-2021 Ivan Pirog, ivan.pirog@gmail.com
+https://github.com/ivanpirog/vortextracker
 }
 
 unit WaveOutAPI;

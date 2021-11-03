@@ -24,7 +24,7 @@ object ExpDlg: TExpDlg
     Caption = 'OK'
     Default = True
     ModalResult = 1
-    TabOrder = 1
+    TabOrder = 3
   end
   object Button2: TButton
     Left = 280
@@ -34,7 +34,7 @@ object ExpDlg: TExpDlg
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 2
+    TabOrder = 4
   end
   object GroupBox1: TGroupBox
     Left = 8
@@ -108,7 +108,7 @@ object ExpDlg: TExpDlg
       '.AY-file'
       '.SCL-file (player and module separately)'
       '.TAP-file (player and module separately)')
-    TabOrder = 3
+    TabOrder = 2
     OnClick = RadioGroup1Click
   end
   object GroupBox2: TGroupBox
@@ -117,7 +117,7 @@ object ExpDlg: TExpDlg
     Width = 265
     Height = 273
     Caption = 'Hints'
-    TabOrder = 4
+    TabOrder = 1
     object Label1: TLabel
       Left = 16
       Top = 16
