@@ -1715,6 +1715,15 @@ var
 
 begin
 
+  // Check is module already opened
+  for i := 0 to MDIChildCount - 1 do begin
+    if TMDIChild(MDIChildren[i]).WinFileName = Name then begin
+      Application.MessageBox(PChar('Module "'+ ExtractFilename(Name) +'"is already opened.'), 'Vortex Tracker',
+        MB_OK + MB_ICONINFORMATION);
+      Exit;
+    end;
+  end;
+
   Inc(WinCount);
   ChildsEventsBlocked := True;
   ResizeActionBlocked := True;
