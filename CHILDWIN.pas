@@ -20658,7 +20658,6 @@ begin
 
   // Change current pattern length
   VTMP.Patterns[CurrentPatternNumber].Length := CurrentPatternNewLength;
-  PatternLenUpDown.Position := CurrentPatternNewLength;
 
   // Change new pattern length
   VTMP.Patterns[NewPatternNumber].Length :=  NewPatternLength;
@@ -20684,6 +20683,9 @@ begin
 
   // Enable autoupdate UpDown controls
   DisableChangingEx := False;
+
+  // Change the pattern lenght updown.
+  PatternLenUpDown.Position := CurrentPatternNewLength;
 
   // Set pattern editor cursor to the first line and on the Channel A note
   Tracks.ShownFrom := 0;
