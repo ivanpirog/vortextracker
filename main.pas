@@ -840,6 +840,11 @@ var attrs: Integer;
 begin
   {$WARN SYMBOL_PLATFORM OFF}
   Result := True;
+
+  // File doesn't exists
+  if not FileExists(FilePath) then Exit;
+
+  // Get current file attributes
   attrs  := FileGetAttr(FilePath);
 
   if attrs and faReadOnly > 0 then begin
@@ -2085,6 +2090,7 @@ begin
 
 
   ConfigFilePath := VortexDir + '\config.ini';
+  IsFileWritable(ConfigFilePath);
 
   // Load fonts
   if Win32MajorVersion > 4 then
