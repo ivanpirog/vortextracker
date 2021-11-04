@@ -13092,7 +13092,7 @@ procedure TMDIChild.SamplesMouseWheelDown(Sender: TObject; Shift: TShiftState; M
 begin
   Samples.InputSNumber := 0;
   ValidateSample2(SamNum);
-
+  Handled := True;
 
   // Decrease selected columns
   if Samples.isColSelecting then begin
@@ -13101,37 +13101,26 @@ begin
   end;
 
 
-  if (Shift = [ssRight]) and (SamplesRightMouseButton) then
+  if (Shift = [ssRight]) and (SamplesRightMouseButton) and (SamplesClickEndLine < MaxSamLen) then
+      Inc(SamplesClickEndLine);
+
+
+  // Scroll sample down
+  if Samples.ShownFrom < MaxSamLen - Samples.NOfLines then
   begin
-
-    if (SamplesClickEndLine - Samples.ShownFrom + 4 < Samples.NOfLines) then
-      Samples.SamplesDontScroll := True
-    else
-      Samples.SamplesDontScroll := False;
-
-    if (SamplesClickEndLine < MaxSamLen) then
-      inc(SamplesClickEndLine);
-
-  end;
-
-  if not Samples.SamplesDontScroll then
-  begin
-    Handled := True;
-    if Samples.ShownFrom < MaxSamLen - Samples.NOfLines then
+    Inc(Samples.ShownFrom);
+    Samples.HideMyCaret;
+    Samples.RedrawSamples(0);
+    if Samples.CursorY > 0 then
     begin
-      Inc(Samples.ShownFrom);
-      Samples.HideMyCaret;
-      Samples.RedrawSamples(0);
-      if Samples.CursorY > 0 then
-      begin
-        Dec(Samples.CursorY);
-        Samples.SetCaretPosition;
-      end;
-      Samples.ShowMyCaret
+      Dec(Samples.CursorY);
+      Samples.SetCaretPosition;
     end;
+    Samples.ShowMyCaret
   end;
 
-  {if (Shift = [ssRight]) and (SamplesRightMouseButton) then
+
+  {if (Shift = [ssRight]) and (SamplesRightMouseButton) then    // Some old shit
     if SamplesClickStartLine >= SamplesClickEndLine then
     begin
       ChangeSampleLength(SamplesClickStartLine + 1, True);
@@ -13169,20 +13158,12 @@ begin
   end;
 
 
-  if (Shift = [ssRight]) and (SamplesRightMouseButton) then
-  begin
+  if (Shift = [ssRight]) and (SamplesRightMouseButton) and (SamplesClickEndLine > 0) then
+      Dec(SamplesClickEndLine);
 
-    if (SamplesClickEndLine - 4 <= Samples.ShownFrom) then
-      Samples.SamplesDontScroll := False
-    else
-      Samples.SamplesDontScroll := True;
 
-    if (SamplesClickEndLine > 0) then
-      dec(SamplesClickEndLine);
-
-  end;
-
-  if (Samples.ShownFrom > 0) and not Samples.SamplesDontScroll then
+  // Scroll sample up
+  if (Samples.ShownFrom > 0) then
   begin
     Dec(Samples.ShownFrom);
     Samples.HideMyCaret;
@@ -13195,7 +13176,8 @@ begin
     Samples.ShowMyCaret
   end;
 
-  {if (Shift = [ssRight]) and (SamplesRightMouseButton) then
+  
+  {if (Shift = [ssRight]) and (SamplesRightMouseButton) then   // Some old shit
     if SamplesClickStartLine >= SamplesClickEndLine then
     begin
       ChangeSampleLength(SamplesClickStartLine + 1, True);
