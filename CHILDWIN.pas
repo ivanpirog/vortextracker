@@ -11870,7 +11870,7 @@ begin
   end;
 
 
-  // Select columns
+  // Select columns by Ctrl key
   if (Shift = [ssCtrl,ssLeft]) and not Samples.isSelecting then
   begin
     SampleCopy.FromLine := LineNum;
@@ -11888,7 +11888,7 @@ begin
   end;
 
 
-  // Start to set loop position
+  // Start to set loop position by right mouse button
   if (Shift = [ssRight]) and (not SamplesRightMouseButton) then
   begin
     SamplesClickStartLine   := LineNum;
@@ -12137,6 +12137,7 @@ begin
   end;
 
 
+  // Draw on sample (TNE, Volume, etc)
   if (Shift = [ssLeft]) then
   begin
     Samples.InputSNumber := 0;
@@ -12147,6 +12148,7 @@ begin
   if ButtonPressed and (y1 >= Samples.NOfLines) and (Samples.ShownFrom + Samples.NOfLines < MaxSamLen) then
   begin
     Inc(Samples.ShownFrom);
+    SamplesLastCursorY := 255;
     Samples.RedrawSamples(0);
   end;
 
@@ -12154,6 +12156,7 @@ begin
   if ButtonPressed and (y1 = 0) and (Samples.ShownFrom > 0) then
   begin
     Dec(Samples.ShownFrom);
+    SamplesLastCursorY := 255;
     Samples.RedrawSamples(0);
   end;
 

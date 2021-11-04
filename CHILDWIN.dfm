@@ -40,7 +40,7 @@ object MDIChild: TMDIChild
     Top = 0
     Width = 634
     Height = 665
-    ActivePage = SamplesSheet
+    ActivePage = PatternsSheet
     BiDiMode = bdLeftToRight
     Constraints.MinWidth = 634
     Images = MainForm.ImageList1
