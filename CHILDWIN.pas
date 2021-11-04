@@ -13109,6 +13109,7 @@ begin
   if Samples.ShownFrom < MaxSamLen - Samples.NOfLines then
   begin
     Inc(Samples.ShownFrom);
+    SamplesLastCursorY := 255;
     Samples.HideMyCaret;
     Samples.RedrawSamples(0);
     if Samples.CursorY > 0 then
@@ -13166,6 +13167,7 @@ begin
   if (Samples.ShownFrom > 0) then
   begin
     Dec(Samples.ShownFrom);
+    SamplesLastCursorY := 255;
     Samples.HideMyCaret;
     Samples.RedrawSamples(0);
     if Samples.CursorY < Samples.NOfLines - 1 then
