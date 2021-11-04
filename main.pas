@@ -1714,18 +1714,36 @@ var
   VTMP2: PModule;
   i: integer;
   NewSize: TSize;
+  OpenedFiles: TStringList;
 
 begin
 
-  // Check is module already opened
+  // --- Check is module already opened
+
+  // Create list of opened files
+  OpenedFiles            := TStringList.Create;
+  OpenedFiles.Sorted     := True;
+  OpenedFiles.Duplicates := dupIgnore;
+
   for i := 0 to MDIChildCount - 1 do begin
-    if TMDIChild(MDIChildren[i]).WinFileName = Name then begin
+    Child := TMDIChild(MDIChildren[i]);
+    if Child.WinFileName <> '' then
+      OpenedFiles.Add(Child.WinFileName);
+  end;
+
+  // Check if file already opened
+  for i := 0 to OpenedFiles.Count - 1 do begin
+    if OpenedFiles[i] = Name then begin
       Application.MessageBox(PChar('Module "'+ ExtractFilename(Name) +'"is already opened.'), 'Vortex Tracker',
         MB_OK + MB_ICONINFORMATION);
+      OpenedFiles.Free;
       Exit;
     end;
   end;
 
+  OpenedFiles.Free;
+
+  // Create MDIChild
   Inc(WinCount);
   ChildsEventsBlocked := True;
   ResizeActionBlocked := True;
