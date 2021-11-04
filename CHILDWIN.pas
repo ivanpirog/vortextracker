@@ -13131,7 +13131,7 @@ begin
     end;
   end;
 
-  if (Shift = [ssRight]) and (SamplesRightMouseButton) then
+  {if (Shift = [ssRight]) and (SamplesRightMouseButton) then
     if SamplesClickStartLine >= SamplesClickEndLine then
     begin
       ChangeSampleLength(SamplesClickStartLine + 1, True);
@@ -13143,7 +13143,7 @@ begin
     begin
       ChangeSampleLength(SamplesClickEndLine, True);
       SampleLenUpDown.Position := SamplesClickEndLine;
-    end;
+    end;}
 
   {else     // Disabled Jump to samples top when scrolling beyond end of sample
   begin
@@ -13195,7 +13195,7 @@ begin
     Samples.ShowMyCaret
   end;
 
-  if (Shift = [ssRight]) and (SamplesRightMouseButton) then
+  {if (Shift = [ssRight]) and (SamplesRightMouseButton) then
     if SamplesClickStartLine >= SamplesClickEndLine then
     begin
       ChangeSampleLength(SamplesClickStartLine + 1, True);
@@ -13207,8 +13207,7 @@ begin
     begin
       ChangeSampleLength(SamplesClickEndLine, True);
       SampleLenUpDown.Position := SamplesClickEndLine;
-    end;
-
+    end;}
 
   {else  // Disabled jump to bottom when scroll beyound start of sample
   begin
