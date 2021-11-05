@@ -12429,7 +12429,9 @@ begin
     MainForm.RestoreControls;
   end;
   MainForm.DeleteWindowListItem(Self);
-  MainForm.Caption := AppName +' '+ VersionString;;
+  MainForm.Caption := AppName +' '+ VersionString;
+
+  TrackInfoForm.Hide;
 
   DisposeUndo(True);
   ChangeList := nil;
