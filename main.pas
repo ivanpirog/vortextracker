@@ -429,7 +429,7 @@ type
     procedure SaveOptions;
     procedure LoadOptions;
     function IsFileAssociationExists(FileExt: string): boolean;
-    function IsVortexFileAssociation(FileExt: string): boolean;
+    function IsVortexFileAssociation(FileExt, AssocName: string): boolean;
     procedure CheckFileAssociations;
     procedure SetFileAssociations;
     procedure PlayPatFromLineUpdate(Sender: TObject);
@@ -4218,35 +4218,49 @@ begin
   end;
 end;
 
-function TMainForm.IsVortexFileAssociation(FileExt: string): boolean;
+function TMainForm.IsVortexFileAssociation(FileExt, AssocName: string): boolean;
+var
+  ExtOk, PathOk, IconOk: Boolean;
 begin
-  Result := False;
+  ExtOk  := False;
+  PathOk := False;
+  IconOk := False;
+
   with TRegistry.Create do
   try
     begin
       RootKey := HKEY_CURRENT_USER;
       if OpenKey('\Software\Classes\' + FileExt, True) then
         if ReadString('') = 'VortexTracker2' then
-          Result := True;
+          ExtOk := True;
+      if OpenKey('\Software\Classes\'+ AssocName +'\shell\open\command', true) then
+        if ReadString('') = Application.ExeName +' "%1"' then
+          PathOk := True;
+      if OpenKey('\Software\Classes\'+ AssocName +'\DefaultIcon', true) then
+        if ReadString('') = Application.ExeName +',0' then
+          IconOk := True;
     end;
   finally
     Free;
   end;
+
+  Result := ExtOk and PathOk and IconOk;
 end;
 
 
 procedure TMainForm.CheckFileAssociations;
 var
   i: Integer;
-  FileExt: String;
+  FileExt, AssocName: String;
 begin
 
   for i := 0 to High(FileAssociations) do
   begin
-    FileExt := FileAssociations[i][1];
+    FileExt   := FileAssociations[i][1];
+    AssocName := FileAssociations[i][2];
 
     // Unckeck file association if already taken by another application
-    if IsFileAssociationExists(FileExt) and not IsVortexFileAssociation(FileExt) then
+    if IsFileAssociationExists(FileExt) and not IsVortexFileAssociation(FileExt, AssocName) then
       FileAssociations[i][0] := '0';
   end;
 end;
@@ -4255,7 +4269,7 @@ end;
 procedure TMainForm.SetFileAssociations;
 var
   i: Integer;
-  FileExt: String;
+  FileExt, AssocName: String;
 
   procedure CreateAssociation(FileExt, Name, Description: string);
   begin
@@ -4299,13 +4313,14 @@ begin
   // Check is file associations changed
   for i := 0 to High(FileAssociations) do begin
     FileExt := FileAssociations[i][1];
-    if (FileAssociations[i][0] = '1') and (not IsFileAssociationExists(FileExt) or not IsVortexFileAssociation(FileExt)) then
+    AssocName := FileAssociations[i][2];
+    if (FileAssociations[i][0] = '1') and (not IsFileAssociationExists(FileExt) or not IsVortexFileAssociation(FileExt, AssocName)) then
     begin
       FileAssocChanged := True;
       Break;
     end;
 
-    if (FileAssociations[i][0] = '0') and IsFileAssociationExists(FileExt) and IsVortexFileAssociation(FileExt) then
+    if (FileAssociations[i][0] = '0') and IsFileAssociationExists(FileExt) and IsVortexFileAssociation(FileExt, AssocName) then
     begin
       FileAssocChanged := True;
       Break;
