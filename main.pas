@@ -2895,8 +2895,14 @@ begin
   end
   else
   begin
-    if not CW.LeftModule then CW := CW.TSWindow;
+    // Swap left and right module, if need
+    if (CW.TSWindow <> nil) and not CW.LeftModule then
+      CW := CW.TSWindow;
+
+    // Save left module
     VTM2TextFile(FileName, CW.VTMP, False);
+
+    // Save right module
     if CW.TSWindow <> nil then
       VTM2TextFile(FileName, CW.TSWindow.VTMP, True);
   end;
