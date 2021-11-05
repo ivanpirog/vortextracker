@@ -12370,6 +12370,7 @@ end;
 procedure TMDIChild.OrnamentsMouseWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
 begin
   if Ornaments.ShownFrom = 0 then Exit;
+  Handled := True;
   Ornaments.ShownFrom := Ornaments.ShownFrom - 1;
   Ornaments.RedrawOrnaments(0);
 end;
@@ -12377,6 +12378,7 @@ end;
 procedure TMDIChild.OrnamentsMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
 begin
   if Ornaments.ShownFrom = MaxOrnLen - (OrnNCol * Ornaments.NRaw) then Exit;
+  Handled := True;
   Ornaments.ShownFrom := Ornaments.ShownFrom + 1;
   Ornaments.RedrawOrnaments(0);
 end;
