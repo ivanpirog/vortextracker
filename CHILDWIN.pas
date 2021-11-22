@@ -14611,8 +14611,15 @@ begin
   NumSelected := SelectRight - SelectLeft + 1;
   TrackLength := VTMP.Positions.Length;
 
-  if (SelectLeft < 0) or (SelectRight < 0) or (VTMP.Positions.Length = 1) then
+  if (SelectLeft < 0) or (SelectRight < 0) or (TrackLength = 1) then
     Exit;
+
+  // Prevent to delete all positions.
+  // Leave the first position in this case.
+  if NumSelected = TrackLength then begin
+    Inc(SelectLeft);
+    Dec(NumSelected);
+  end;
 
   // Save UNDO information
   SongChanged := True;
@@ -14646,7 +14653,7 @@ begin
   InputPNumber := 0;
 
   // Change position and pattern
-  if SelectLeft = VTMP.Positions.Length then
+  if SelectLeft = TrackLength then
     Dec(SelectLeft);
   SelectPosition2(SelectLeft);
 
@@ -20118,7 +20125,7 @@ end;
 procedure TMDIChild.AutoNumeratePatterns;
 var
   StartPos, DestPos, PatterNumber, i,
-    PatternLength, LastPatternNumber: Integer;
+    LastPatternLength, LastPatternNumber: Integer;
 begin
   if StringGrid1.Selection.Left < VTMP.Positions.Length then
     exit;
@@ -20136,20 +20143,20 @@ begin
     LastPatternNumber := VTMP.Positions.Value[StartPos-1]
   else
     LastPatternNumber := VTMP.Positions.Value[StartPos];
-  PatternLength := VTMP.Patterns[LastPatternNumber].Length;
+  LastPatternLength := VTMP.Patterns[LastPatternNumber].Length;
 
   // Increase track length
   IncreaseTrackLength(DestPos-StartPos+1);
 
   // Create new patterns
-  if PatterNumber = 0 then Dec(PatterNumber);
   for i := StartPos to DestPos do
   begin
     Inc(PatterNumber);
     if PatterNumber > MaxPatNum then
       exit;
     ValidatePattern2(PatterNumber);
-    VTMP.Patterns[PatterNumber].Length := PatternLength;
+    // The length of new patterns should be the same as the length of last pattern
+    VTMP.Patterns[PatterNumber].Length := LastPatternLength;
     VTMP.Positions.Value[i] := PatterNumber;
   end;
 
