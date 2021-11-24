@@ -6222,6 +6222,7 @@ begin
       BuffSample.Loop    := Sam.Loop;
       BuffSample.Enabled := Sam.Enabled;
       BuffSample.Items   := Sam.Items;
+      LastClipboard      := LCSamples;
     finally
       CloseFile(TxtFile)
     end;
@@ -6244,8 +6245,9 @@ begin
       Readln(TxtFile, s);
       SampleCopy.ToLine := StrToInt(s);
 
-      SampleCopy.Ready := True;
+      SampleCopy.Ready  := True;
       SampleCopy.Sample := @BuffSample;
+      LastClipboard     := LCSamples;
     finally
       CloseFile(TxtFile)
     end;
@@ -6270,6 +6272,7 @@ begin
       Readln(TxtFile, s);
       if s = 'All' then
         BuffOrnament.CopyAll := True;
+      LastClipboard := LCOrnaments;
     finally
       CloseFile(TxtFile);
     end;
