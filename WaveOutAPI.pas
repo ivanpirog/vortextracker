@@ -778,7 +778,7 @@ var
   isrCounter, isrStep: Double;
   ExportModal: TExport;
   RealBufferSize: Integer;
-  FromPosition, ToPosition, CurPosition: Integer;
+  FromPosition, ToPosition, CurPosition, PositionCount: Integer;
   PrevLoopAllowed: Boolean;
   PlayAll: Boolean;
   LeadWindow: TMDIChild;
@@ -1042,6 +1042,8 @@ begin
     LeadWindow   := PlayingWindow[1];
   end;
 
+  PositionCount := ToPosition - FromPosition + 1;
+
   PrevPosNum1 := LeadWindow.PositionNumber;
   PrevPatNum1 := LeadWindow.PatNum;
   if LeadWindow.TSWindow <> nil then begin
@@ -1070,11 +1072,16 @@ begin
 
   // Show export modal
   ExportModal := TExport.Create(MainForm);
-  ExportModal.ExportProgress.Position := 1;
-  ExportModal.ExportProgress.Step := 1;
   ExportModal.ExportProgress.Min  := 0;
-  ExportModal.ExportProgress.Max  := PlayingWindow[1].VTMP.Positions.Length +
-    ((PlayingWindow[1].VTMP.Positions.Length - PlayingWindow[1].VTMP.Positions.Loop) * ExportLoops);
+  ExportModal.ExportProgress.Step := 1;
+
+  // Calculate max value for progress bar
+  if PlayAll then
+    ExportModal.ExportProgress.Max  := PositionCount + ((PositionCount - PlayingWindow[1].VTMP.Positions.Loop) * ExportLoops)
+  else
+    ExportModal.ExportProgress.Max  := PositionCount * (ExportLoops+1);
+
+  ExportModal.ExportProgress.Position := 0;
   ExportModal.Show;
 
   
