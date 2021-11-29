@@ -47,6 +47,7 @@ object MainForm: TMainForm
         Width = 61
       end>
     SizeGrip = False
+    OnDblClick = StatusBarDblClick
   end
   object ToolBar2: TToolBar
     Left = 0

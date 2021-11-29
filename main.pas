@@ -594,6 +594,7 @@ type
     procedure PackPatternActExecute(Sender: TObject);
     procedure ExportPSGActExecute(Sender: TObject);
     procedure ExportPSGActUpdate(Sender: TObject);
+    procedure StatusBarDblClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -786,7 +787,7 @@ implementation
 {$J+} { Assignable Typed Constant }
 
 uses About, options, TrkMng, GlbTrn, ExportZX, selectts, TglSams, HotKeys,
-  Math, Types, InstrumentsPack, Registry, ShlObj, StrUtils;
+  Math, Types, InstrumentsPack, Registry, ShlObj, StrUtils, ClipBrd;
 
 type
   TStr4 = array[0..3] of char;
@@ -7252,6 +7253,34 @@ begin
 end;
 
 
+
+procedure TMainForm.StatusBarDblClick(Sender: TObject);
+var
+  MouseClickCoord: TPoint;
+  i, Width, PanelNum: Integer;
+begin
+  Width := 0;
+  PanelNum := -1;
+
+  // Convert absolute mouse coordinates to local coordinates
+  MouseClickCoord := SmallPointToPoint(TSmallPoint(DWORD(GetMessagePos)));
+  MapWindowPoints(HWND_DESKTOP, StatusBar.Handle, MouseClickCoord, 1);
+
+  // Determine which panel user clicked on
+  for i := 0 to StatusBar.Panels.Count - 1 do begin
+    Width := Width + StatusBar.Panels[i].Width;
+    if MouseClickCoord.X < Width then begin
+      PanelNum := i;
+      Break;
+    end;
+  end;
+
+  if (PanelNum = -1) or (PanelNum <> 1) then Exit;
+
+  // Copy ints info to clipboard
+  Clipboard.AsText := StatusBar.Panels[1].Text;
+
+end;
 
 end.
 
