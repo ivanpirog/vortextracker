@@ -360,7 +360,8 @@ end;
 
 procedure TAyumi.SetNoise(period: Integer);
 begin
-  noisePeriod := period and $1f;
+  period := period and $1f;
+  noisePeriod := Ord((period = 0)) or period;
 end;
 
 
