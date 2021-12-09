@@ -2817,7 +2817,7 @@ begin
         colors := colors + IntToStr(VTM.Positions.Colors[i]) + ',';
         j := i;
       end;
-      colors := colors + IntToStr(VTM.Positions.Colors[j]);
+      colors := colors + IntToStr(VTM.Positions.Colors[j+1]);
       Writeln(TxtFile, 'Colors=' + colors);
     end;
 
